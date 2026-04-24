@@ -1,0 +1,123 @@
+{% comment %}
+  Back to Top Button Snippet
+  Usage: {% render 'back-to-top' %}
+  Place this snippet just before the closing </body> tag in layout/theme.liquid
+  
+  Features:
+  - Appears after scrolling 300px down
+  - Smooth scroll animation
+  - Accessible with keyboard navigation
+  - Respects prefers-reduced-motion
+{% endcomment %}
+
+<button
+  id="back-to-top-btn"
+  class="back-to-top"
+  aria-label="Back to top"
+  title="Back to top"
+  type="button"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+  <span class="visually-hidden">Back to top</span>
+</button>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-foreground, #1a1a1a);
+    color: var(--color-background, #ffffff);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    background-color: var(--color-primary-button-background, #333);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .back-to-top:focus-visible {
+    outline: 2px solid var(--color-foreground, #1a1a1a);
+    outline-offset: 3px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .back-to-top {
+      bottom: 1.25rem;
+      right: 1.25rem;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: opacity 0.1s ease, visibility 0.1s ease;
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const btn = document.getElementById('back-to-top-btn');
+    if (!btn) return;
+
+    const SCROLL_THRESHOLD = 300;
+
+    // Show/hide button based on scroll position
+    function handleScroll() {
+      if (window.scrollY > SCROLL_THRESHOLD) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    }
+
+    // Scroll to top smoothly
+    btn.addEventListener('click', function () {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
+    });
+
+    // Throttle scroll event for performance
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Initial check
+    handleScroll();
+  })();
+</script>

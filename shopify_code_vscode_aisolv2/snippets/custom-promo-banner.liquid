@@ -1,0 +1,139 @@
+{% comment %}
+  Custom Promotional Banner Snippet
+  Usage: {% render 'custom-promo-banner', message: 'Free shipping on orders over $50!', bg_color: '#1a1a2e', text_color: '#ffffff' %}
+  
+  Parameters:
+  - message: The promotional text to display
+  - bg_color: Background color (hex or CSS value)
+  - text_color: Text color (hex or CSS value)
+  - show_close: Whether to show a close button (true/false)
+{% endcomment %}
+
+{% assign promo_message = message | default: 'Welcome to our store! Enjoy free shipping on all orders today.' %}
+{% assign promo_bg = bg_color | default: '#1a1a2e' %}
+{% assign promo_text = text_color | default: '#ffffff' %}
+{% assign show_close_btn = show_close | default: true %}
+
+<div
+  class="custom-promo-banner"
+  id="custom-promo-banner"
+  style="background-color: {{ promo_bg }}; color: {{ promo_text }};"
+  role="region"
+  aria-label="Promotional announcement"
+>
+  <div class="custom-promo-banner__inner">
+    <span class="custom-promo-banner__icon" aria-hidden="true">🎉</span>
+    <p class="custom-promo-banner__message">{{ promo_message }}</p>
+    {% if show_close_btn %}
+      <button
+        class="custom-promo-banner__close"
+        id="custom-promo-banner-close"
+        aria-label="Close promotional banner"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .custom-promo-banner {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 100;
+    transition: all 0.3s ease;
+  }
+
+  .custom-promo-banner.hidden {
+    display: none;
+  }
+
+  .custom-promo-banner__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .custom-promo-banner__icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .custom-promo-banner__message {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+
+  .custom-promo-banner__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .custom-promo-banner__close:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .custom-promo-banner {
+      padding: 8px 16px;
+    }
+
+    .custom-promo-banner__message {
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const banner = document.getElementById('custom-promo-banner');
+    const closeBtn = document.getElementById('custom-promo-banner-close');
+    const STORAGE_KEY = 'promo_banner_closed';
+
+    // Check if user already closed the banner in this session
+    if (sessionStorage.getItem(STORAGE_KEY) === 'true') {
+      if (banner) banner.classList.add('hidden');
+      return;
+    }
+
+    if (closeBtn && banner) {
+      closeBtn.addEventListener('click', function () {
+        banner.style.maxHeight = banner.offsetHeight + 'px';
+        banner.style.overflow = 'hidden';
+        requestAnimationFrame(function () {
+          banner.style.transition = 'max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease';
+          banner.style.maxHeight = '0';
+          banner.style.paddingTop = '0';
+          banner.style.paddingBottom = '0';
+          banner.style.opacity = '0';
+        });
+        setTimeout(function () {
+          banner.classList.add('hidden');
+          sessionStorage.setItem(STORAGE_KEY, 'true');
+        }, 300);
+      });
+    }
+  })();
+</script>

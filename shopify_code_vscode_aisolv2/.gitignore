@@ -1,0 +1,67 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Shopify CLI
+.shopify/
+.shopify-cli.yml
+
+# Build / output
+dist/
+build/
+.cache/
+.next/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Mac system files
+.AppleDouble
+.LSOverride
+
+# Linux temp files
+*~
+
+# Windows system files
+ehthumbs.db
+Desktop.ini
+
+# Shopify Theme specific
+config/settings_data.json   # contains store-specific data (usually avoid committing)
+config/settings_schema.json # OPTIONAL: keep if you want version control
+
+# Ignore local-only theme files
+*.zip
+
+# Coverage
+coverage/
+
+# Optional: lock files (choose based on your team)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+.DS_Store
+Thumbs.db
+config/settings_data.json
+*.zip
