@@ -28,6 +28,7 @@
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+    {{ 'sticky-header-custom.css' | asset_url | stylesheet_tag }}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
 
@@ -135,5 +136,11 @@
 
     {% comment %} Custom: Back to Top Button {% endcomment %}
     {% render 'back-to-top' %}
+
+    {% comment %} Custom: Newsletter Popup {% endcomment %}
+    {% render 'newsletter-popup' %}
+
+    {% comment %} Custom: Trust Badges {% endcomment %}
+    {% render 'trust-badges' %}
   </body>
 </html>

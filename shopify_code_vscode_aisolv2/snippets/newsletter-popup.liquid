@@ -1,0 +1,87 @@
+{%- comment -%}
+  Newsletter Popup Snippet
+  Shows a popup after 3 seconds asking visitors to subscribe.
+  Dismissed state is stored in localStorage.
+{%- endcomment -%}
+
+<div id="newsletter-popup-overlay" class="newsletter-overlay" aria-hidden="true">
+  <div class="newsletter-popup" role="dialog" aria-modal="true" aria-labelledby="newsletter-popup-title">
+    <button class="newsletter-close" id="newsletter-close-btn" aria-label="Close newsletter popup">&times;</button>
+
+    <div class="newsletter-popup__content">
+      <div class="newsletter-popup__icon">✉️</div>
+      <h2 id="newsletter-popup-title" class="newsletter-popup__title">Get 10% Off Your First Order!</h2>
+      <p class="newsletter-popup__subtitle">Subscribe to our newsletter for exclusive deals, new arrivals, and style tips.</p>
+
+      <form class="newsletter-popup__form" id="newsletter-popup-form">
+        <div class="newsletter-popup__input-group">
+          <input
+            type="email"
+            name="email"
+            id="newsletter-popup-email"
+            class="newsletter-popup__input"
+            placeholder="Enter your email address"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="newsletter-popup__submit">Subscribe</button>
+        </div>
+        <p class="newsletter-popup__privacy">No spam, unsubscribe anytime. 🔒</p>
+      </form>
+
+      <div class="newsletter-popup__success" id="newsletter-success" style="display:none;">
+        <div class="newsletter-popup__success-icon">🎉</div>
+        <p>Thank you! Your 10% discount code: <strong>WELCOME10</strong></p>
+      </div>
+
+      <button class="newsletter-popup__skip" id="newsletter-skip-btn">No thanks, I'll pay full price</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'newsletter_dismissed';
+  var overlay = document.getElementById('newsletter-popup-overlay');
+  var closeBtn = document.getElementById('newsletter-close-btn');
+  var skipBtn = document.getElementById('newsletter-skip-btn');
+  var form = document.getElementById('newsletter-popup-form');
+  var successDiv = document.getElementById('newsletter-success');
+
+  // Don't show if already dismissed
+  if (localStorage.getItem(STORAGE_KEY)) return;
+
+  // Show popup after 3 seconds
+  setTimeout(function() {
+    overlay.classList.add('newsletter-overlay--visible');
+    overlay.setAttribute('aria-hidden', 'false');
+  }, 3000);
+
+  function dismissPopup() {
+    overlay.classList.remove('newsletter-overlay--visible');
+    overlay.setAttribute('aria-hidden', 'true');
+    localStorage.setItem(STORAGE_KEY, '1');
+  }
+
+  closeBtn.addEventListener('click', dismissPopup);
+  skipBtn.addEventListener('click', dismissPopup);
+
+  // Close on overlay click
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) dismissPopup();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') dismissPopup();
+  });
+
+  // Handle form submit
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    form.style.display = 'none';
+    successDiv.style.display = 'block';
+    setTimeout(dismissPopup, 4000);
+  });
+})();
+</script>
